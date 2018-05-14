@@ -75,7 +75,7 @@ function groupByVoterId( rows ) {
     return byVoterId;
 }
 
-if ( process.argv.length < 2 ) {
+if ( process.argv.length < 3 ) {
     console.error('Usage: node parse.js date');
     return;
 }
