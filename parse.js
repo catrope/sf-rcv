@@ -35,7 +35,7 @@
  */
 function parseMasterLookup( rows ) {
     let byType = {};
-    rows.forEach( function ( row ) {
+    for ( let row of rows ) {
         if ( row.trim() === '' ) {
             return;
         }
@@ -50,7 +50,7 @@ function parseMasterLookup( rows ) {
         };
         byType[parsedRow.type] = byType[parsedRow.type] || {};
         byType[parsedRow.type][parsedRow.id] = parsedRow;
-    } );
+    }
     return byType;
 }
 
@@ -67,7 +67,7 @@ function parseMasterLookup( rows ) {
  */
 function parseBallotImages( rows, lookupMap ) {
     let byContest = {};
-    rows.forEach( function ( row ) {
+    for ( let row of rows ) {
         if ( row.trim() === '' ) {
             return;
         }
@@ -90,7 +90,7 @@ function parseBallotImages( rows, lookupMap ) {
             lookupMap.Candidate[parsedRow.candidate].name;
         byContest[contest] = byContest[contest] || [];
         byContest[contest].push( parsedRow );
-    } );
+    }
     return byContest;
 }
 
@@ -115,7 +115,7 @@ function parseBallotImages( rows, lookupMap ) {
  */
 function groupByVoterId( rows ) {
     let byVoterId = {};
-    rows.forEach( function ( row ) {
+    for ( let row of rows ) {
         byVoterId[row.voterId] = byVoterId[row.voterId] || {
             machine: row.machine,
             tallyType: row.tallyType,
@@ -124,7 +124,7 @@ function groupByVoterId( rows ) {
         };
         byVoterId[row.voterId].votes[row.voteRank - 1] =
             row.candidate || ( row.isUndervote ? 'undervote' : 'overvote' );
-    } );
+    }
     return byVoterId;
 }
 
