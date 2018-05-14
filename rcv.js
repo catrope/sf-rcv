@@ -46,13 +46,14 @@ function redistribute( buckets, loser, eliminated ) {
         }
         // If we skipped everything, this ballot is exhausted
         newBucket = ballot.votes[i] || 'exhausted';
-        // Move the ballot to the new bucket. We copy it here, and empty the loser's bucket at the end
+        // Move the ballot to the new bucket. We copy it here, and delete the loser's bucket at the end
         buckets[newBucket].push( ballot );
         // Keep count of how many ballots are redistributed to whom
         redistributions[newBucket] = redistributions[newBucket] || 0;
         redistributions[newBucket]++;
     }
-    buckets[loser] = [];
+    delete buckets[loser];
+    return redistributions;
 }
 
 /**
