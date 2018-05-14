@@ -19,6 +19,9 @@ for ( let contest in data ) {
     contests[contest] = Object.values( data[contest] );
 }
 
+let result = {};
 for ( let contest in contests ) {
-    console.log( util.inspect( contestInfo( contests[contest] ), { depth: Infinity } ) );
+    result[contest] = contestInfo( contests[contest] );
 }
+
+process.stdout.write( JSON.stringify( result ) );
