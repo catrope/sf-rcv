@@ -18,8 +18,10 @@
  *           string, // Second choice candidate
  *           string  // Third choice candidate
  *       ]
- *     }
- *   }
+ *     },
+ *     ...
+ *   },
+ *   ...
  * }
  */
 
