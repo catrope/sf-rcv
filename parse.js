@@ -1,4 +1,27 @@
-const fs = require('fs');
+/*!
+ * This script parses a ballot image file and a master lookup file, and converts it to JSON.
+ *
+ * Usage: node parse.js 20161206
+ * This will read 20161206_ballotimage.txt and 20161206_masterlookup.txt, and write JSON to stdout.
+ * The output format is:
+ *
+ * {
+ *   // for each contest:
+ *   CONTESTNAME: {
+ *     // for each vote:
+ *     ID: {
+ *       "machine": number,   // serial number of machine that processed the vote
+ *       "tallyType": string, // when and how the vote was processed, e.g. "Election Day - Insight"
+ *       "precinct": string,  // precinct name, usually of the form "Pct 1145" (some exceptions)
+ *       "votes": [
+ *           string, // First choice candidate: name (in all caps) or "undervote" or "overvote"
+ *           string, // Second choice candidate
+ *           string  // Third choice candidate
+ *       ]
+ *     }
+ *   }
+ * }
+ */
 
 /**
  * Parse rows in the master lookup file.
@@ -31,6 +54,17 @@ function parseMasterLookup( rows ) {
     return byType;
 }
 
+/**
+ * Parse rows in the ballot image file.
+ *
+ * The returned data structure looks like { CONTEST: [ row, row, ... ] }
+ * where a row is an object with keys voterId, machine, tallyType, precinct, voteRank, candidate,
+ * isOvervote and isUndervote.
+ *
+ * @param {string[]} rows Array of rows in the ballot image file
+ * @param {Object} lookupMap Result of parseMasterLookup()
+ * @return {Object} Parsed data
+ */
 function parseBallotImages( rows, lookupMap ) {
     let byContest = {};
     rows.forEach( function ( row ) {
@@ -60,6 +94,25 @@ function parseBallotImages( rows, lookupMap ) {
     return byContest;
 }
 
+/**
+ * For a given contest, group votes by voter ID.
+ *
+ * The returned data structure looks like:
+ * {
+ *     VOTERID: {
+ *         machine: number,
+ *         tallyType: string,
+ *         precinct: string,
+ *         votes: [
+ *             string,
+ *             string,
+ *             string
+ *         ]
+ *     }
+ * }
+ * @param {Object[]} rows All rows (returned by parseBallotImages()) for one contest
+ * @return {Object} Votes grouped by voter ID
+ */
 function groupByVoterId( rows ) {
     let byVoterId = {};
     rows.forEach( function ( row ) {
@@ -80,7 +133,8 @@ if ( process.argv.length < 3 ) {
     return;
 }
 
-const rawMasterLookup = fs.readFileSync( process.argv[2] + '_masterlookup.txt', { encoding: 'utf8' } ),
+const fs = require( 'fs' ),
+    rawMasterLookup = fs.readFileSync( process.argv[2] + '_masterlookup.txt', { encoding: 'utf8' } ),
     rawBallotImage = fs.readFileSync( process.argv[2] + '_ballotimage.txt', { encoding: 'utf8' } ),
     typeIdMap = parseMasterLookup( rawMasterLookup.split( '\r\n' ) ),
     ballotImages = parseBallotImages( rawBallotImage.split( '\r\n' ), typeIdMap );
