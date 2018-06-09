@@ -39,7 +39,7 @@ function parseMasterLookup( rows ) {
     let byType = {};
     for ( let row of rows ) {
         if ( row.trim() === '' ) {
-            return;
+            continue;
         }
         let parsedRow = {
             type: row.substr(0, 10).trim(),
@@ -71,7 +71,7 @@ function parseBallotImages( rows, lookupMap ) {
     let byContest = {};
     for ( let row of rows ) {
         if ( row.trim() === '' ) {
-            return;
+            continue;
         }
         let contest = Number( row.substr(0, 7) );
         let parsedRow = {
