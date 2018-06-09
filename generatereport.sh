@@ -1,6 +1,22 @@
 #! /bin/bash
 
 cat <<MD
+# Number of votes by district
+
+Supervisorial district | Votes in mayor's race
+---------------------- | ---------------------
+MD
+sqlite3 $1 <<SQL
+SELECT district, COUNT(*)
+FROM ballots
+WHERE contest='Mayor'
+GROUP BY district;
+SQL
+
+cat <<MD
+
+
+
 # First/second/third choices per candidate
 The number of first-choice, second-choice and third-choice received by each candidate overall.
 
