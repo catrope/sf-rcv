@@ -101,26 +101,26 @@ First choice breakdown of voters who voted in both the Mayor's race and the Dist
 MD
 
 sqlite3 $1 <<SQL
-SELECT mandelman.first, mandelman.count, sheehy.count, dagesse.count, blank.count, overvote.count
+SELECT sheehy.first, mandelman.count, sheehy.count, dagesse.count, blank.count, overvote.count
 FROM (SELECT m.first AS first, COUNT(*) AS count
     FROM ballots AS m JOIN ballots AS s ON m.id=s.id
     WHERE m.contest='Mayor' AND s.first='Rafael Mandelman'
     GROUP BY m.first) AS mandelman
-JOIN (SELECT m2.first AS first, COUNT(*) AS count
+LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
     FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
     WHERE m2.contest='Mayor' AND s2.first='Jeff Sheehy'
     GROUP BY m2.first) AS sheehy ON sheehy.first=mandelman.first
-JOIN (SELECT m2.first AS first, COUNT(*) AS count
+LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
     FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
     WHERE m2.contest='Mayor' AND s2.first='Lawrence ''''Stark'''' Dagesse'
     GROUP BY m2.first) AS dagesse ON dagesse.first=mandelman.first
-JOIN (SELECT m2.first AS first, COUNT(*) AS count
+LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
     FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
     WHERE m2.contest='Mayor' AND s2.first='(blank)'
     GROUP BY m2.first) AS blank ON blank.first=mandelman.first
-JOIN (SELECT m2.first AS first, COUNT(*) AS count
+LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
     FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
     WHERE m2.contest='Mayor' AND s2.first='(overvote)'
     GROUP BY m2.first) AS overvote ON overvote.first=mandelman.first
-ORDER BY mandelman.count DESC;
+ORDER BY sheehy.count DESC;
 SQL
