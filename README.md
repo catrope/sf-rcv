@@ -7,6 +7,7 @@ Scripts I threw together to analyze SF's ranked-choice voting data files
 # Usage
 
 ```
+$ sudo apt install make sqlite3 jq
 $ npm install
 $ make
 ```
