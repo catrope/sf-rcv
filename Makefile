@@ -15,5 +15,8 @@ today: 20180608_report.md
 %.sqlite3: %_data.json
 	node tosqlite.js $< $@
 
-%_report.md: %.sqlite3
-	./generatereport.sh $< > $@
+%_analysis.json: %_data.json
+	node analyze.js $< > $@
+
+%_report.md: %.sqlite3 %_analysis.json
+	./generatereport.sh $^ > $@

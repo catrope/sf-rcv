@@ -7,7 +7,7 @@ The number of first-choice, second-choice and third-choice received by each cand
 Candidate | First-choice votes | Second-choice votes | Third-choice votes
 --------- | ------------------ | ------------------- | ------------------
 MD
-sqlite3 $@ <<SQL
+sqlite3 $1 <<SQL
 SELECT
     candidate,
     (SELECT COUNT(*) FROM ballots WHERE first=candidate) AS firstChoice,
@@ -29,7 +29,7 @@ Candidate | Second-choice votes
 --------- | -------------------
 MD
 
-sqlite3 $@ <<SQL
+sqlite3 $1 <<SQL
 SELECT second, COUNT(*) AS votes
 FROM ballots
 WHERE contest='Mayor'
@@ -48,7 +48,7 @@ Candidate | Second-choice votes
 --------- | -------------------
 MD
 
-sqlite3 $@ <<SQL
+sqlite3 $1 <<SQL
 SELECT second, COUNT(*) AS votes
 FROM ballots
 WHERE contest='Mayor'
