@@ -1,0 +1,12 @@
+{
+  "name": "rcv-sf",
+  "version": "0.1.0",
+  "description": "Processes San Francisco ranked-choice voting data files",
+  "author": "Roan Kattouw <roan.kattouw@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/catrope/sf-rcv",
+  "repository": "github:catrope/sf-rcv",
+  "dependencies": {
+    "sqlite3": "^4.0.0"
+  }
+}
