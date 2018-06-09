@@ -6,7 +6,7 @@ Scripts I threw together to analyze SF's ranked-choice voting data files
 ```
 $ npm install
 $ make
-$ sqlite3 20180608.sqlite3    # Name of the .sqlite file may vary
-sqlite> select count(*) from ballots;
-211344
 ```
+
+This will generate a `.md` file with a report, as well as a `.sqlite3` file
+with a database containing all ballots.
