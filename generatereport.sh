@@ -10,12 +10,13 @@ MD
 sqlite3 $@ <<SQL
 SELECT
     candidate,
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate) AS firstChoice,
     (SELECT COUNT(*) FROM ballots WHERE second=candidate),
     (SELECT COUNT(*) FROM ballots WHERE third=candidate)
 FROM (
     SELECT DISTINCT first AS candidate FROM ballots WHERE contest='Mayor'
-);
+)
+ORDER BY firstChoice DESC;
 SQL
 
 cat <<MD
