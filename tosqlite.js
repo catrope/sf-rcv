@@ -9,12 +9,12 @@ function formatVote( vote ) {
 	} )[ vote ] || vote;
 }
 
-if ( process.argv.length < 3 ) {
-	console.error( 'Usage: node tosqlite.js data.json' );
+if ( process.argv.length < 4 ) {
+	console.error( 'Usage: node tosqlite.js data.json db.sqlite3' );
 }
 
 const data = JSON.parse( fs.readFileSync( process.argv[2], { encoding: 'utf8' } ) ),
-	db = new sqlite3.Database( process.argv[2].replace( /\.json$/, '' ) + '.sqlite3' );
+	db = new sqlite3.Database( process.argv[3] );
 
 db.serialize( function () {
 	db.run( 'CREATE TABLE ballots(id INT, contest TEXT, first TEXT, second TEXT, third TEXT, precinct TEXT, machine INT, tallyType TEXT)' );

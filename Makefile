@@ -9,11 +9,11 @@ today: 20180608_report.md
 %_masterlookup.txt:
 	wget http://www.sfelections.org/results/20180605/data/$(@:_masterlookup.txt=)/$@
 
-%.json: %_ballotimage.txt %_masterlookup.txt
-	node parse.js $(@:.json=) > $@
+%_data.json: %_ballotimage.txt %_masterlookup.txt
+	node parse.js $(@:_data.json=) > $@
 
-%.sqlite3: %.json
-	node tosqlite.js $<
+%.sqlite3: %_data.json
+	node tosqlite.js $< $@
 
 %_report.md: %.sqlite3
 	./generatereport.sh $< > $@
