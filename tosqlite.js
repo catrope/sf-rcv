@@ -6,7 +6,7 @@ if ( process.argv.length < 3 ) {
 }
 
 const data = JSON.parse( fs.readFileSync( process.argv[2], { encoding: 'utf8' } ) ),
-	db = new sqlite3.Database( process.argv[2].replace( /\.json$/, '' ) + '.sqlite' );
+	db = new sqlite3.Database( process.argv[2].replace( /\.json$/, '' ) + '.sqlite3' );
 
 db.serialize( function () {
 	db.run( 'CREATE TABLE ballots(id INT, contest TEXT, first TEXT, second TEXT, third TEXT, precinct TEXT, machine INT, tallyType TEXT)' );
