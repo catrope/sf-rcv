@@ -7,10 +7,15 @@ Supervisorial district | Votes in mayor's race
 ---------------------- | ---------------------
 MD
 sqlite3 $1 <<SQL
-SELECT district, COUNT(*)
-FROM ballots
-WHERE contest='Mayor'
-GROUP BY district;
+SELECT district, votes||' ('||percentage||'%)'
+FROM (
+    SELECT district, COUNT(*) AS votes,
+        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor'), 2) AS percentage
+    FROM ballots
+    WHERE contest='Mayor'
+    GROUP BY district
+    ORDER BY district
+);
 SQL
 
 cat <<MD
