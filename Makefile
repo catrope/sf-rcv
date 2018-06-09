@@ -1,4 +1,4 @@
-today: 20180608.sqlite3
+today: 20180608_report.md
 
 # Prevent make from deleting any of the intermediate files
 .SECONDARY:
@@ -14,3 +14,6 @@ today: 20180608.sqlite3
 
 %.sqlite3: %.json
 	node tosqlite.js $<
+
+%_report.md: %.sqlite3
+	./generatereport.sh $< > $@
