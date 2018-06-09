@@ -29,15 +29,22 @@ Candidate | First-choice votes | Second-choice votes | Third-choice votes
 --------- | ------------------ | ------------------- | ------------------
 MD
 sqlite3 $1 <<SQL
-SELECT
-    candidate,
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate) AS firstChoice,
-    (SELECT COUNT(*) FROM ballots WHERE second=candidate),
-    (SELECT COUNT(*) FROM ballots WHERE third=candidate)
+SELECT candidate,
+    firstChoices||' ('||ROUND(100.0*firstChoices/total, 2)||'%)',
+    secondChoices||' ('||ROUND(100.0*secondChoices/total, 2)||'%)',
+    thirdChoices||' ('||ROUND(100.0*thirdChoices/total, 2)||'%)'
 FROM (
-    SELECT DISTINCT first AS candidate FROM ballots WHERE contest='Mayor'
+    SELECT
+        candidate,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate) AS firstChoices,
+        (SELECT COUNT(*) FROM ballots WHERE second=candidate) AS secondChoices,
+        (SELECT COUNT(*) FROM ballots WHERE third=candidate) AS thirdChoices,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor') AS total
+    FROM (
+        SELECT DISTINCT first AS candidate FROM ballots WHERE contest='Mayor'
+    )
 )
-ORDER BY firstChoice DESC;
+ORDER BY firstChoices DESC
 SQL
 
 cat <<MD
