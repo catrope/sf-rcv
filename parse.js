@@ -25,6 +25,10 @@
  * }
  */
 
+function formatCandidate( name ) {
+	return name.toLowerCase().replace( /\b[a-z]/g, (m) => m.toUpperCase() );
+}
+
 /**
  * Parse rows in the master lookup file.
  *
@@ -89,7 +93,7 @@ function parseBallotImages( rows, lookupMap ) {
 		parsedRow.precinct = lookupMap.Precinct[parsedRow.precinct].name;
 		parsedRow.candidate = parsedRow.candidate === 0 ?
 		    null :
-		    lookupMap.Candidate[parsedRow.candidate].name;
+		    formatCandidate( lookupMap.Candidate[parsedRow.candidate].name );
 		byContest[contest] = byContest[contest] || [];
 		byContest[contest].push( parsedRow );
 	}
