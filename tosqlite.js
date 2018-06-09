@@ -9,12 +9,13 @@ function encodeValue( x ) {
 	if ( typeof x === 'number' ) {
 		return x;
 	}
-	return "'" + String(x).replace(/'/, "''") + "'";
+	return "'" + String(x).replace(/'/g, "''") + "'";
 }
 
 const data = JSON.parse( fs.readFileSync( process.argv[2], { encoding: 'utf8' } ) );
 
 console.log('CREATE TABLE ballots(id INT, contest TEXT, first TEXT, second TEXT, third TEXT, precinct TEXT, machine INT, tallyType TEXT);');
+console.log('BEGIN;');
 for ( let contest in data ) {
 	for ( let id in data[contest] ) {
 		let vote = data[contest][id];
@@ -25,3 +26,4 @@ for ( let contest in data ) {
 		);
 	}
 }
+console.log('END;');
