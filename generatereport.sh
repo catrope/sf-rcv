@@ -97,7 +97,7 @@ cat <<MD
 First choice breakdown of voters who voted in both the Mayor's race and the District 8 Supervisor race.
 
 x | Rafael Mandelman | Jeff Sheehy | Lawrence "Stark" Dagesse | (blank) | (overvote)
-- | ---------------- | ----------- | ------------------------ | ------- | ----------
+-- | ---------------- | ----------- | ------------------------ | ------- | ----------
 MD
 
 sqlite3 $1 <<SQL
