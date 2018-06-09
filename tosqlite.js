@@ -1,6 +1,14 @@
 const sqlite3 = require( 'sqlite3' ),
 	fs = require( 'fs' );
 
+
+function formatVote( vote ) {
+	return ( {
+		undervote: '(blank)',
+		overvote: '(overvote)'
+	} )[ vote ] || vote;
+}
+
 if ( process.argv.length < 3 ) {
 	console.error( 'Usage: node tosqlite.js data.json' );
 }
@@ -16,7 +24,7 @@ db.serialize( function () {
 	for ( let contest in data ) {
 		for ( let id in data[contest] ) {
 			let vote = data[contest][id];
-			statement.run( Number( id ), contest, ...vote.votes, vote.precinct, vote.machine, vote.tallyType );
+			statement.run( Number( id ), contest, ...vote.votes.map( formatVote ), vote.precinct, vote.machine, vote.tallyType );
 		}
 	}
 	statement.finalize();
