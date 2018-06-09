@@ -56,3 +56,19 @@ AND first='Mark Leno'
 GROUP BY second
 ORDER BY votes DESC;
 SQL
+
+KIMDATA=$(cat $2 | jq '.Mayor.rounds[6].sources | map_values(.["Jane Kim"]) | to_entries | map(select(.value != null)) | sort_by(.value) | reverse | from_entries')
+cat <<MD
+
+
+# First non-blank choice Kim: last round distribution
+Where ballots whose first non-blank choice was Jane Kim end up in the final round.
+
+Candidate | Kim-originating votes
+--------- | ---------------------
+MD
+IFS=$'\n'
+for candidate in $(echo $KIMDATA | jq -r 'keys_unsorted | .[]');
+do
+    echo "$candidate|$(echo $KIMDATA | jq -r .[\"$candidate\"])"
+done
