@@ -101,7 +101,7 @@ First choice breakdown of voters who voted in both the Mayor's race and the Dist
 MD
 
 sqlite3 $1 <<SQL
-SELECT sheehy.first, mandelman.count, sheehy.count, dagesse.count, blank.count, overvote.count
+SELECT mandelman.first, mandelman.count, sheehy.count, dagesse.count, blank.count, overvote.count
 FROM (SELECT m.first AS first, COUNT(*) AS count
     FROM ballots AS m JOIN ballots AS s ON m.id=s.id
     WHERE m.contest='Mayor' AND s.first='Rafael Mandelman'
@@ -122,5 +122,5 @@ LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
     FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
     WHERE m2.contest='Mayor' AND s2.first='(overvote)'
     GROUP BY m2.first) AS overvote ON overvote.first=mandelman.first
-ORDER BY sheehy.count DESC;
+ORDER BY mandelman.count DESC;
 SQL
