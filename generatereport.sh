@@ -83,7 +83,8 @@ SELECT '(total)' AS candidate,
     (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=8),
     (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=9),
     (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=10),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=11)
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=11),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor')
 ;
 SQL
 
