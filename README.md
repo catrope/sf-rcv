@@ -2,7 +2,11 @@
 Scripts I threw together to analyze SF's ranked-choice voting data files
 
 # Most recent report
+[2018-06-09 report](20180609_report.md)
+
+# Previous reports
 [2018-06-08 report](20180608_report.md)
+
 
 # Usage
 

@@ -1,4 +1,4 @@
-today: 20180608_report.md
+today: 20180609_report.md
 
 # Prevent make from deleting any of the intermediate files
 .SECONDARY:
