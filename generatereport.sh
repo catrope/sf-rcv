@@ -94,6 +94,7 @@ FROM (
 SQL
 
 KIMDATA=$(cat $2 | jq '.Mayor.rounds[6].sources | map_values(.["Jane Kim"]) | to_entries | map(select(.value != null)) | sort_by(.value) | reverse | from_entries')
+KIMTOTAL=$(echo $KIMDATA | jq add)
 cat <<MD
 
 
@@ -106,7 +107,9 @@ MD
 IFS=$'\n'
 for candidate in $(echo $KIMDATA | jq -r 'keys_unsorted | .[]');
 do
-    echo "$candidate|$(echo $KIMDATA | jq -r .[\"$candidate\"])"
+    CANDIDATEVOTES=$(echo $KIMDATA | jq -r .[\"$candidate\"])
+    CANDIDATEPERCENT=$(awk -v candidate=$CANDIDATEVOTES -v total=$KIMTOTAL 'BEGIN{printf "%.2f\n", 100*candidate/total}')
+    echo "$candidate|$CANDIDATEVOTES ($CANDIDATEPERCENT%)"
 done
 
 
