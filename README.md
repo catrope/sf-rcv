@@ -11,10 +11,17 @@ Scripts I threw together to analyze SF's ranked-choice voting data files
 # Usage
 
 ```
-$ sudo apt install make sqlite3 jq
 $ npm install
 $ make
 ```
 
 This will generate a `.md` file with a report, as well as a `.sqlite3` file
 with a database containing all ballots.
+
+# Dependencies
+
+The following command line programs are assumed to be present:
+- sqlite3
+- jq
+- make
+- awk
