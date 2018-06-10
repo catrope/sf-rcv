@@ -58,12 +58,16 @@ Candidate | Second-choice votes
 MD
 
 sqlite3 $1 <<SQL
-SELECT second, COUNT(*) AS votes
-FROM ballots
-WHERE contest='Mayor'
-AND first='London Breed'
-GROUP BY second
-ORDER BY votes DESC;
+SELECT second, votes||' ('||percentage||'%)'
+FROM (
+    SELECT second, COUNT(*) AS votes,
+        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND first='London Breed'), 2) AS percentage
+    FROM ballots
+    WHERE contest='Mayor'
+    AND first='London Breed'
+    GROUP BY second
+    ORDER BY votes DESC
+)
 SQL
 
 cat <<MD
@@ -77,12 +81,16 @@ Candidate | Second-choice votes
 MD
 
 sqlite3 $1 <<SQL
-SELECT second, COUNT(*) AS votes
-FROM ballots
-WHERE contest='Mayor'
-AND first='Mark Leno'
-GROUP BY second
-ORDER BY votes DESC;
+SELECT second, votes||' ('||percentage||'%)'
+FROM (
+    SELECT second, COUNT(*) AS votes,
+        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND first='Mark Leno'), 2) AS percentage
+    FROM ballots
+    WHERE contest='Mayor'
+    AND first='Mark Leno'
+    GROUP BY second
+    ORDER BY votes DESC
+)
 SQL
 
 KIMDATA=$(cat $2 | jq '.Mayor.rounds[6].sources | map_values(.["Jane Kim"]) | to_entries | map(select(.value != null)) | sort_by(.value) | reverse | from_entries')
