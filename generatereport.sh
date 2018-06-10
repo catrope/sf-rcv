@@ -1,27 +1,6 @@
 #! /bin/bash
 
 cat <<MD
-# Number of votes by district
-
-Supervisorial district | Votes in mayor's race
----------------------- | ---------------------
-MD
-sqlite3 $1 <<SQL
-SELECT district, votes||' ('||percentage||'%)'
-FROM (
-    SELECT district, COUNT(*) AS votes,
-        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor'), 2) AS percentage
-    FROM ballots
-    WHERE contest='Mayor'
-    GROUP BY district
-    ORDER BY district
-);
-SQL
-
-cat <<MD
-
-
-
 # First/second/third choices per candidate
 The number of first-choice, second-choice and third-choice received by each candidate overall.
 
@@ -45,6 +24,67 @@ FROM (
     )
 )
 ORDER BY firstChoices DESC
+SQL
+
+cat <<MD
+
+# Number of votes by district
+
+Supervisorial district | Votes in mayor's race
+---------------------- | ---------------------
+MD
+sqlite3 $1 <<SQL
+SELECT district, votes||' ('||percentage||'%)'
+FROM (
+    SELECT district, COUNT(*) AS votes,
+        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor'), 2) AS percentage
+    FROM ballots
+    WHERE contest='Mayor'
+    GROUP BY district
+    ORDER BY district
+);
+SQL
+
+cat <<MD
+
+# First choice votes by district
+
+Candidate | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9 | D10 | D11 | Total
+--------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --- | --- | -----
+MD
+sqlite3 $1 <<SQL
+SELECT candidate,
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=1),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=2),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=3),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=4),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=5),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=6),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=7),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=8),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=9),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=10),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=11),
+    (SELECT COUNT(*) FROM ballots WHERE first=candidate) AS total
+FROM (
+    SELECT DISTINCT first AS candidate FROM ballots WHERE contest='Mayor'
+)
+ORDER BY total DESC;
+SQL
+sqlite3 $1 <<SQL
+SELECT '(total)' AS candidate,
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=1),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=2),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=3),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=4),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=5),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=6),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=7),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=8),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=9),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=10),
+    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=11)
+;
 SQL
 
 cat <<MD
