@@ -49,8 +49,8 @@ cat <<MD
 
 # First choice votes by district
 
-Candidate | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9 | D10 | D11 | Total
---------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --- | --- | -----
+Candidate | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9 | D10 | D11
+--------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --- | ---
 MD
 sqlite3 $1 <<SQL
 SELECT candidate,
