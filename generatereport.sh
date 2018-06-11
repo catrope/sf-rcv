@@ -54,38 +54,49 @@ Candidate | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9 | D10 | D11 | Total
 MD
 sqlite3 $1 <<SQL
 SELECT candidate,
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=1),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=2),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=3),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=4),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=5),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=6),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=7),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=8),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=9),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=10),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=11),
-    (SELECT COUNT(*) FROM ballots WHERE first=candidate) AS total
+    d1||' ('||ROUND(100.0*d1/d1total, 2)||'%)',
+    d2||' ('||ROUND(100.0*d2/d2total, 2)||'%)',
+    d3||' ('||ROUND(100.0*d3/d3total, 2)||'%)',
+    d4||' ('||ROUND(100.0*d4/d4total, 2)||'%)',
+    d5||' ('||ROUND(100.0*d5/d5total, 2)||'%)',
+    d6||' ('||ROUND(100.0*d6/d6total, 2)||'%)',
+    d7||' ('||ROUND(100.0*d7/d7total, 2)||'%)',
+    d8||' ('||ROUND(100.0*d8/d8total, 2)||'%)',
+    d9||' ('||ROUND(100.0*d9/d9total, 2)||'%)',
+    d10||' ('||ROUND(100.0*d10/d10total, 2)||'%)',
+    d11||' ('||ROUND(100.0*d11/d11total, 2)||'%)'
 FROM (
-    SELECT DISTINCT first AS candidate FROM ballots WHERE contest='Mayor'
+    SELECT candidate,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=1) as d1,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=2) as d2,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=3) as d3,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=4) as d4,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=5) as d5,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=6) as d6,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=7) as d7,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=8) as d8,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=9) as d9,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=10) as d10,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=11) as d11
+        FROM (
+            SELECT DISTINCT first AS candidate FROM ballots WHERE contest='Mayor'
+        )
+    )
+JOIN (
+    SELECT
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=1) as d1total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=2) as d2total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=3) as d3total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=4) as d4total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=5) as d5total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=6) as d6total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=7) as d7total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=8) as d8total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=9) as d9total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=10) as d10total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=11) as d11total
 )
-ORDER BY total DESC;
-SQL
-sqlite3 $1 <<SQL
-SELECT '(total)' AS candidate,
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=1),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=2),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=3),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=4),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=5),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=6),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=7),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=8),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=9),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=10),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=11),
-    (SELECT COUNT(*) FROM ballots WHERE contest='Mayor')
-;
+ORDER BY d1 DESC;
 SQL
 
 cat <<MD
