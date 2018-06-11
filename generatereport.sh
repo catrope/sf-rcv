@@ -101,6 +101,48 @@ SQL
 
 cat <<MD
 
+# Round of three votes by district
+District | Breed | Leno | Kim
+-------- | ----- | ---- | ---
+MD
+sqlite3 $1 <<SQL
+SELECT district,
+    breed||' ('||ROUND(100.0*breed/total, 2)||'%)',
+    leno||' ('||ROUND(100.0*leno/total, 2)||'%)',
+    kim||' ('||ROUND(100.0*kim/total, 2)||'%)'
+FROM (
+    SELECT b.district AS district, b.votes AS breed, l.votes AS leno, k.votes AS kim,
+        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND roundOf3 IN ('London Breed', 'Mark Leno', 'Jane Kim')) AS total
+    FROM
+    (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='London Breed' GROUP BY district) AS b
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='Mark Leno' GROUP BY district) AS l ON l.district=b.district
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='Jane Kim' GROUP BY district) AS k ON k.district=b.district
+)
+ORDER BY district;
+SQL
+
+cat <<MD
+
+# Last round votes by district
+District | Breed | Leno
+-------- | ----- | ----
+MD
+sqlite3 $1 <<SQL
+SELECT district,
+    breed||' ('||ROUND(100.0*breed/total, 2)||'%)',
+    leno||' ('||ROUND(100.0*leno/total, 2)||'%)'
+FROM (
+    SELECT b.district AS district, b.votes AS breed, l.votes AS leno,
+        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND roundOf2 IN ('London Breed', 'Mark Leno')) AS total
+    FROM
+    (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf2='London Breed' GROUP BY district) AS b
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf2='Mark Leno' GROUP BY district) AS l ON l.district=b.district
+)
+ORDER BY district;
+SQL
+
+cat <<MD
+
 
 # First choice Breed: second choices
 The distribution of second choices of the voters whose first choice was London Breed.
