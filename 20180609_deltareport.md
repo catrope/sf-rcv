@@ -125,7 +125,7 @@ Jane Kim|694|185|6|57|0
 London Breed|600|737|8|152|0
 Angela Alioto|57|68|4|13|0
 Richie Greenberg|11|17|4|5|0
-(blank)|10|10|0|54|0
+(blank)|10|10|0|1|0
 Ellen Lee Zhou|8|11|1|3|0
 Amy Farah Weiss|7|8|3|0|0
 Michelle Bravo|3|1|0|1|0

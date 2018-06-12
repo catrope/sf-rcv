@@ -129,9 +129,9 @@ First choice breakdown of voters who voted in both the Mayor's race and the Dist
 Jane Kim|149|53|1|13|0
 Mark Leno|146|75|3|16|2
 London Breed|130|156|3|36|1
-(overvote)|11|7|1|5|161
+(overvote)|11|7|1|5|1
 Angela Alioto|10|8|1|4|0
 Richie Greenberg|9|3|2|1|0
-(blank)|5|2|0|603|0
+(blank)|5|2|0|44|0
 Ellen Lee Zhou|2|0|0|1|0
 Amy Farah Weiss|1|1|0|1|0

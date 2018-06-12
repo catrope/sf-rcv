@@ -133,6 +133,6 @@ Angela Alioto|162|216|30|40|0
 Amy Farah Weiss|54|12|9|1|0
 Richie Greenberg|50|42|18|18|0
 Michelle Bravo|16|8|2|1|0
-(blank)|13|9|1|678|0
+(blank)|13|9|1|50|0
 Ellen Lee Zhou|11|17|7|15|0
-(overvote)|5|3|1|2|98
+(overvote)|5|3|1|2|3

@@ -261,12 +261,12 @@ LEFT JOIN (SELECT m.first AS first, COUNT(*) AS count
     GROUP BY m.first) AS dagesse ON dagesse.first=mandelman.first
 LEFT JOIN (SELECT m.first AS first, COUNT(*) AS count
     FROM ballots AS m JOIN ballots AS s ON m.id=s.id
-    WHERE m.contest='Mayor' AND s.first='(blank)'
+    WHERE m.contest='Mayor' AND s.contest='Board of Supervisors, District 8' AND s.first='(blank)'
     AND $MSDELTACOND
     GROUP BY m.first) AS blank ON blank.first=mandelman.first
 LEFT JOIN (SELECT m.first AS first, COUNT(*) AS count
     FROM ballots AS m JOIN ballots AS s ON m.id=s.id
-    WHERE m.contest='Mayor' AND s.first='(overvote)'
+    WHERE m.contest='Mayor' AND s.contest='Board of Supervisors, District 8' AND s.first='(overvote)'
     AND $MSDELTACOND
     GROUP BY m.first) AS overvote ON overvote.first=mandelman.first
 ORDER BY mandelman.count DESC;

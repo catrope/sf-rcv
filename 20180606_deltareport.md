@@ -132,5 +132,5 @@ London Breed|87|122|3|15|0
 Angela Alioto|11|7|0|3|0
 Amy Farah Weiss|5|2|0|0|0
 Richie Greenberg|2|1|1|1|0
-(blank)|1|0|0|55|0
+(blank)|1|0|0|5|0
 Ellen Lee Zhou|1|2|0|0|0
