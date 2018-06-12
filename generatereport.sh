@@ -7,6 +7,14 @@ then
     MSDELTACOND="m.id > $2 AND s.id > $2"
 fi
 
+echo -n "Total votes (for mayor) in this report: "
+sqlite3 $1 <<SQL
+SELECT COUNT(*)
+FROM ballots
+WHERE contest='Mayor'
+AND $DELTACOND;
+SQL
+
 cat <<MD
 # First/second/third choices per candidate
 The number of first-choice, second-choice and third-choice received by each candidate overall.

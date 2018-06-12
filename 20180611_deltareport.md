@@ -1,3 +1,4 @@
+Total votes (for mayor) in this report: 7474
 # First/second/third choices per candidate
 The number of first-choice, second-choice and third-choice received by each candidate overall.
 
