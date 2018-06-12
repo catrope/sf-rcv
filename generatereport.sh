@@ -1,4 +1,11 @@
 #! /bin/bash
+DELTACOND="1=1"
+MSDELTACOND="1=1"
+if [ "x$2" != "x" ]
+then
+    DELTACOND="id > $2"
+    MSDELTACOND="m.id > $2 AND s.id > $2"
+fi
 
 cat <<MD
 # First/second/third choices per candidate
@@ -15,10 +22,10 @@ SELECT candidate,
 FROM (
     SELECT
         candidate,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate) AS firstChoices,
-        (SELECT COUNT(*) FROM ballots WHERE second=candidate) AS secondChoices,
-        (SELECT COUNT(*) FROM ballots WHERE third=candidate) AS thirdChoices,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor') AS total
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND $DELTACOND) AS firstChoices,
+        (SELECT COUNT(*) FROM ballots WHERE second=candidate AND $DELTACOND) AS secondChoices,
+        (SELECT COUNT(*) FROM ballots WHERE third=candidate AND $DELTACOND) AS thirdChoices,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND $DELTACOND) AS total
     FROM (
         SELECT DISTINCT first AS candidate FROM ballots WHERE contest='Mayor'
     )
@@ -37,9 +44,9 @@ sqlite3 $1 <<SQL
 SELECT district, votes||' ('||percentage||'%)'
 FROM (
     SELECT district, COUNT(*) AS votes,
-        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor'), 2) AS percentage
+        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND $DELTACOND), 2) AS percentage
     FROM ballots
-    WHERE contest='Mayor'
+    WHERE contest='Mayor' AND $DELTACOND
     GROUP BY district
     ORDER BY district
 );
@@ -67,34 +74,34 @@ SELECT candidate,
     d11||' ('||ROUND(100.0*d11/d11total, 2)||'%)'
 FROM (
     SELECT candidate,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=1) as d1,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=2) as d2,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=3) as d3,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=4) as d4,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=5) as d5,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=6) as d6,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=7) as d7,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=8) as d8,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=9) as d9,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=10) as d10,
-        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=11) as d11
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=1 AND $DELTACOND) as d1,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=2 AND $DELTACOND) as d2,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=3 AND $DELTACOND) as d3,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=4 AND $DELTACOND) as d4,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=5 AND $DELTACOND) as d5,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=6 AND $DELTACOND) as d6,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=7 AND $DELTACOND) as d7,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=8 AND $DELTACOND) as d8,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=9 AND $DELTACOND) as d9,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=10 AND $DELTACOND) as d10,
+        (SELECT COUNT(*) FROM ballots WHERE first=candidate AND district=11 AND $DELTACOND) as d11
         FROM (
             SELECT DISTINCT first AS candidate FROM ballots WHERE contest='Mayor'
         )
     )
 JOIN (
     SELECT
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=1) as d1total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=2) as d2total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=3) as d3total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=4) as d4total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=5) as d5total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=6) as d6total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=7) as d7total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=8) as d8total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=9) as d9total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=10) as d10total,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=11) as d11total
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=1 AND $DELTACOND) as d1total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=2 AND $DELTACOND) as d2total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=3 AND $DELTACOND) as d3total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=4 AND $DELTACOND) as d4total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=5 AND $DELTACOND) as d5total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=6 AND $DELTACOND) as d6total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=7 AND $DELTACOND) as d7total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=8 AND $DELTACOND) as d8total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=9 AND $DELTACOND) as d9total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=10 AND $DELTACOND) as d10total,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND district=11 AND $DELTACOND) as d11total
 )
 ORDER BY d1 DESC;
 SQL
@@ -112,11 +119,11 @@ SELECT district,
     kim||' ('||ROUND(100.0*kim/total, 2)||'%)'
 FROM (
     SELECT b.district AS district, b.votes AS breed, l.votes AS leno, k.votes AS kim,
-        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND roundOf3 IN ('London Breed', 'Mark Leno', 'Jane Kim')) AS total
+        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND roundOf3 IN ('London Breed', 'Mark Leno', 'Jane Kim') AND $DELTACOND) AS total
     FROM
-    (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='London Breed' GROUP BY district) AS b
-    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='Mark Leno' GROUP BY district) AS l ON l.district=b.district
-    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='Jane Kim' GROUP BY district) AS k ON k.district=b.district
+    (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='London Breed' AND $DELTACOND GROUP BY district) AS b
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='Mark Leno' AND $DELTACOND GROUP BY district) AS l ON l.district=b.district
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='Jane Kim' AND $DELTACOND GROUP BY district) AS k ON k.district=b.district
 )
 ORDER BY district;
 SQL
@@ -133,10 +140,10 @@ SELECT district,
     leno||' ('||ROUND(100.0*leno/total, 2)||'%)'
 FROM (
     SELECT b.district AS district, b.votes AS breed, l.votes AS leno,
-        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND roundOf2 IN ('London Breed', 'Mark Leno')) AS total
+        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND roundOf2 IN ('London Breed', 'Mark Leno') AND $DELTACOND) AS total
     FROM
-    (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf2='London Breed' GROUP BY district) AS b
-    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf2='Mark Leno' GROUP BY district) AS l ON l.district=b.district
+    (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf2='London Breed' AND $DELTACOND GROUP BY district) AS b
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf2='Mark Leno' AND $DELTACOND GROUP BY district) AS l ON l.district=b.district
 )
 ORDER BY district;
 SQL
@@ -155,10 +162,11 @@ sqlite3 $1 <<SQL
 SELECT second, votes||' ('||percentage||'%)'
 FROM (
     SELECT second, COUNT(*) AS votes,
-        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND first='London Breed'), 2) AS percentage
+        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND first='London Breed' AND $DELTACOND), 2) AS percentage
     FROM ballots
     WHERE contest='Mayor'
     AND first='London Breed'
+    AND $DELTACOND
     GROUP BY second
     ORDER BY votes DESC
 )
@@ -178,10 +186,11 @@ sqlite3 $1 <<SQL
 SELECT second, votes||' ('||percentage||'%)'
 FROM (
     SELECT second, COUNT(*) AS votes,
-        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND first='Mark Leno'), 2) AS percentage
+        ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND first='Mark Leno' AND $DELTACOND), 2) AS percentage
     FROM ballots
     WHERE contest='Mayor'
     AND first='Mark Leno'
+    AND $DELTACOND
     GROUP BY second
     ORDER BY votes DESC
 )
@@ -200,10 +209,11 @@ SELECT candidate,
     votes||'( '||ROUND(100.0*votes/total, 2)||'%)'
 FROM (
     SELECT roundOf2 AS candidate, COUNT(*) AS votes,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND roundOf3='Jane Kim') AS total
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND roundOf3='Jane Kim' AND $DELTACOND) AS total
     FROM ballots
     WHERE contest='Mayor'
     AND roundOf3='Jane Kim'
+    AND $DELTACOND
     GROUP BY roundOf2
     ORDER BY votes DESC
 );
@@ -229,22 +239,27 @@ SELECT mandelman.first,
 FROM (SELECT m.first AS first, COUNT(*) AS count
     FROM ballots AS m JOIN ballots AS s ON m.id=s.id
     WHERE m.contest='Mayor' AND s.first='Rafael Mandelman'
+    AND $MSDELTACOND
     GROUP BY m.first) AS mandelman
-LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
-    FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
-    WHERE m2.contest='Mayor' AND s2.first='Jeff Sheehy'
-    GROUP BY m2.first) AS sheehy ON sheehy.first=mandelman.first
-LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
-    FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
-    WHERE m2.contest='Mayor' AND s2.first='Lawrence ''''Stark'''' Dagesse'
-    GROUP BY m2.first) AS dagesse ON dagesse.first=mandelman.first
-LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
-    FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
-    WHERE m2.contest='Mayor' AND s2.first='(blank)'
-    GROUP BY m2.first) AS blank ON blank.first=mandelman.first
-LEFT JOIN (SELECT m2.first AS first, COUNT(*) AS count
-    FROM ballots AS m2 JOIN ballots AS s2 ON m2.id=s2.id
-    WHERE m2.contest='Mayor' AND s2.first='(overvote)'
-    GROUP BY m2.first) AS overvote ON overvote.first=mandelman.first
+LEFT JOIN (SELECT m.first AS first, COUNT(*) AS count
+    FROM ballots AS m JOIN ballots AS s ON m.id=s.id
+    WHERE m.contest='Mayor' AND s.first='Jeff Sheehy'
+    AND $MSDELTACOND
+    GROUP BY m.first) AS sheehy ON sheehy.first=mandelman.first
+LEFT JOIN (SELECT m.first AS first, COUNT(*) AS count
+    FROM ballots AS m JOIN ballots AS s ON m.id=s.id
+    WHERE m.contest='Mayor' AND s.first='Lawrence ''''Stark'''' Dagesse'
+    AND $MSDELTACOND
+    GROUP BY m.first) AS dagesse ON dagesse.first=mandelman.first
+LEFT JOIN (SELECT m.first AS first, COUNT(*) AS count
+    FROM ballots AS m JOIN ballots AS s ON m.id=s.id
+    WHERE m.contest='Mayor' AND s.first='(blank)'
+    AND $MSDELTACOND
+    GROUP BY m.first) AS blank ON blank.first=mandelman.first
+LEFT JOIN (SELECT m.first AS first, COUNT(*) AS count
+    FROM ballots AS m JOIN ballots AS s ON m.id=s.id
+    WHERE m.contest='Mayor' AND s.first='(overvote)'
+    AND $MSDELTACOND
+    GROUP BY m.first) AS overvote ON overvote.first=mandelman.first
 ORDER BY mandelman.count DESC;
 SQL
