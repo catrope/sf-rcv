@@ -1,8 +1,9 @@
 # sf-rcv
 Scripts I threw together to analyze SF's ranked-choice voting data files
 
-# Most recent report
-[2018-06-11 report](20180611_report.md)
+# Today's reports
+* [2018-06-11 full report](20180611_report.md)
+* [2018-06-11 new votes report](20180611_deltareport.md)
 
 # Previous reports
 - [2018-06-10 report](20180610_report.md)
