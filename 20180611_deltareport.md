@@ -114,10 +114,10 @@ Where Jane Kim's votes went after she was eliminated
 
 Candidate | Votes gained
 --------- | ------------
-Mark Leno|1428( 70.48%)
-London Breed|390( 19.25%)
-exhausted|198( 9.77%)
-overvote|10( 0.49%)
+Mark Leno|1428 (70.48%)
+London Breed|390 (19.25%)
+exhausted|198 (9.77%)
+overvote|10 (0.49%)
 
 
 # Mayoral first choice by D8 first choice

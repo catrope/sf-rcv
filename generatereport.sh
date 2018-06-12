@@ -206,7 +206,7 @@ Candidate | Votes gained
 MD
 sqlite3 $1 <<SQL
 SELECT candidate,
-    votes||'( '||ROUND(100.0*votes/total, 2)||'%)'
+    votes||' ('||ROUND(100.0*votes/total, 2)||'%)'
 FROM (
     SELECT roundOf2 AS candidate, COUNT(*) AS votes,
         (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND roundOf3='Jane Kim' AND $DELTACOND) AS total
