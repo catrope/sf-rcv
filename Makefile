@@ -20,5 +20,5 @@ all: 20180611_report.md 20180610_report.md 20180609_report.md 20180608_report.md
 %_analysis.json: %_data.json
 	node analyze.js $< > $@
 
-%_report.md: %.sqlite3 %_analysis.json
+%_report.md: %.sqlite3
 	./generatereport.sh $^ > $@
