@@ -2,18 +2,17 @@
 Scripts I threw together to analyze SF's ranked-choice voting data files
 
 # Today's reports
-* [2018-06-11 full report](20180611_report.md)
-* [2018-06-11 new votes report](20180611_deltareport.md)
+- [2018-06-11 full report](20180611_report.md)
+- [2018-06-11 newly added votes report](20180611_deltareport.md)
 
 # Previous reports
-- [2018-06-10 report](20180610_report.md)
-- [2018-06-09 report](20180609_report.md)
-- [2018-06-08 report](20180608_report.md)
-- [2018-06-07 report](20180607_report.md)
-- [2018-06-06 report](20180606_report.md)
-- [2018-06-05 second report (VBM+precinct)](20180605_4_report.md)
-- [2018-06-05 first report (VBM only)](20180605_1_report.md)
-
+- 2018-06-10 ([full report](20180610_report.md), [newly added votes](20180610_deltareport.md))
+- 2018-06-09 ([full report](20180609_report.md), [newly added votes](20180609_deltareport.md))
+- 2018-06-08 ([full report](20180608_report.md), [newly added votes](20180608_deltareport.md))
+- 2018-06-07 ([full report](20180607_report.md), [newly added votes](20180607_deltareport.md))
+- 2018-06-06 ([full report](20180606_report.md), [newly added votes](20180606_deltareport.md))
+- 2018-06-05 second report (early mail and e-day precinct votes) ([full report](20180605_4_report.md), [newly added votes](20180605_4_deltareport.md))
+- 2018-06-05 first report (early mail votes only) ([full report](20180605_1_report.md))
 
 # Usage
 

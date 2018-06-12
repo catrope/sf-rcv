@@ -1,6 +1,13 @@
 today: 20180611_report.md 20180611_deltareport.md
 
-all: 20180611_report.md 20180610_report.md 20180609_report.md 20180608_report.md 20180607_report.md 20180606_report.md 20180605_4_report.md 20180605_1_report.md
+all: 20180611_report.md 20180611_deltareport.md \
+	20180610_report.md 20180610_deltareport.md \
+	20180609_report.md 20180609_deltareport.md \
+	20180608_report.md 20180608_deltareport.md \
+	20180607_report.md 20180607_deltareport.md \
+	20180606_report.md 20180606_deltareport.md \
+	20180605_4_report.md 20180605_4_deltareport.md \
+	20180605_1_report.md
 
 # Prevent make from deleting any of the intermediate files
 .SECONDARY:
@@ -24,4 +31,22 @@ all: 20180611_report.md 20180610_report.md 20180609_report.md 20180608_report.md
 	./generatereport.sh $^ > $@
 
 20180611_deltareport.md: 20180611.sqlite3 20180610.sqlite3
-	./generatereport.sh 20180611.sqlite3 `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180610.sqlite3` > $@
+	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180610.sqlite3` > $@
+
+20180610_deltareport.md: 20180610.sqlite3 20180609.sqlite3
+	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180609.sqlite3` > $@
+
+20180609_deltareport.md: 20180609.sqlite3 20180608.sqlite3
+	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180608.sqlite3` > $@
+
+20180608_deltareport.md: 20180608.sqlite3 20180607.sqlite3
+	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180607.sqlite3` > $@
+
+20180607_deltareport.md: 20180607.sqlite3 20180606.sqlite3
+	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180606.sqlite3` > $@
+
+20180606_deltareport.md: 20180606.sqlite3 20180605_4.sqlite3
+	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180605_4.sqlite3` > $@
+
+20180605_4_deltareport.md: 20180605_4.sqlite3 20180605_1.sqlite3
+	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180605_1.sqlite3` > $@
