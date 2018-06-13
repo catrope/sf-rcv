@@ -1,6 +1,7 @@
-today: 20180612_report.md 20180612_deltareport.md
+today: 20180613_report.md 20180613_deltareport.md
 
-all: 20180612_report.md 20180612_deltareport.md \
+all: 20180613_report.md 20180613_deltareport.md \
+	20180612_report.md 20180612_deltareport.md \
 	20180611_report.md 20180611_deltareport.md \
 	20180610_report.md 20180610_deltareport.md \
 	20180609_report.md 20180609_deltareport.md \
@@ -30,6 +31,9 @@ all: 20180612_report.md 20180612_deltareport.md \
 
 %_report.md: %.sqlite3
 	./generatereport.sh $^ > $@
+
+20180613_deltareport.md: 20180613.sqlite3 20180612.sqlite3
+	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180612.sqlite3` > $@
 
 20180612_deltareport.md: 20180612.sqlite3 20180611.sqlite3
 	./generatereport.sh $< `echo 'SELECT MAX(id) FROM ballots' | sqlite3 20180611.sqlite3` > $@
