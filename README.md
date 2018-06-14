@@ -2,10 +2,11 @@
 Scripts I threw together to analyze SF's ranked-choice voting data files
 
 # Today's reports
-- [2018-06-13 full report](20180613_report.md)
-- [2018-06-13 newly added votes report](20180613_deltareport.md)
+- [2018-06-14 full report](20180614_report.md)
+- [2018-06-14 newly added votes report](20180614_deltareport.md)
 
 # Previous reports
+- 2018-06-13 ([full report](20180613_report.md), [newly added votes](20180613_deltareport.md))
 - 2018-06-12 ([full report](20180612_report.md), [newly added votes](20180612_deltareport.md))
 - 2018-06-11 ([full report](20180611_report.md), [newly added votes](20180611_deltareport.md))
 - 2018-06-10 ([full report](20180610_report.md), [newly added votes](20180610_deltareport.md))
