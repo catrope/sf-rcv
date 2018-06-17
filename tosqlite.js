@@ -31,6 +31,7 @@ function keyById( buckets ) {
 
 if ( process.argv.length < 4 ) {
 	console.error( 'Usage: node tosqlite.js data.json db.sqlite3' );
+	return;
 }
 
 const data = JSON.parse( fs.readFileSync( process.argv[2], { encoding: 'utf8' } ) ),
@@ -48,37 +49,32 @@ for ( let contest in data ) {
 
 
 db.serialize( function () {
-	db.run( 'CREATE TABLE ballots(id INT, contest TEXT, first TEXT, second TEXT, third TEXT, roundOf3 TEXT, roundOf2 TEXT, precinct TEXT, district INT, machine INT, tallyType TEXT)' );
+	db.run( 'CREATE TABLE ballots(id INT, contest TEXT, first TEXT, second TEXT, third TEXT, precinct TEXT, district INT, machine INT, tallyType TEXT,' +
+		'round1 TEXT, round2 TEXT, round3 TEXT, round4 TEXT, round5 TEXT, round6 TEXT, round7 TEXT, round8 TEXT)' );
 	db.run( 'BEGIN' );
 
-	let statement = db.prepare( 'INSERT INTO ballots VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+	let statement = db.prepare( 'INSERT INTO ballots VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
 	for ( let contest in data ) {
-		let roundOf3 = keyById( contestData[contest][ contestData[contest].length - 2].buckets ),
-			roundOf2 = keyById( contestData[contest][ contestData[contest].length - 1].buckets );
+		let roundData = contestData[contest].map( (c) => keyById( c.buckets ) );
 		for ( let id in data[contest] ) {
-			let vote = data[contest][id], r3Candidate, r2Candidate;
-			for ( let candidate in roundOf3 ) {
-				if ( id in roundOf3[candidate] ) {
-					r3Candidate = candidate;
-					break;
-				}
-			}
-			for ( let candidate in roundOf2 ) {
-				if ( id in roundOf2[candidate] ) {
-					r2Candidate = candidate;
-					break;
+			let vote = data[contest][id], roundCandidates = [];
+			for ( let r = 0; r < 8; r++ ) {
+				for ( let candidate in roundData[r] ) {
+					if ( id in roundData[r][candidate] ) {
+						roundCandidates[r] = candidate;
+						break;
+					}
 				}
 			}
 			statement.run(
 				Number( id ),
 				contest,
 				...vote.votes.map( formatVote ),
-				r3Candidate,
-				r2Candidate,
 				vote.precinct,
 				getDistrict( vote.precinct ),
 				vote.machine,
-				vote.tallyType
+				vote.tallyType,
+				...roundCandidates
 			);
 		}
 	}

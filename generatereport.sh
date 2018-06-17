@@ -127,11 +127,11 @@ SELECT district,
     kim||' ('||ROUND(100.0*kim/total, 2)||'%)'
 FROM (
     SELECT b.district AS district, b.votes AS breed, l.votes AS leno, k.votes AS kim,
-        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND roundOf3 IN ('London Breed', 'Mark Leno', 'Jane Kim') AND $DELTACOND) AS total
+        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND round7 IN ('London Breed', 'Mark Leno', 'Jane Kim') AND $DELTACOND) AS total
     FROM
-    (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='London Breed' AND $DELTACOND GROUP BY district) AS b
-    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='Mark Leno' AND $DELTACOND GROUP BY district) AS l ON l.district=b.district
-    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf3='Jane Kim' AND $DELTACOND GROUP BY district) AS k ON k.district=b.district
+    (SELECT district, COUNT(*) AS votes FROM ballots WHERE round7='London Breed' AND $DELTACOND GROUP BY district) AS b
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE round7='Mark Leno' AND $DELTACOND GROUP BY district) AS l ON l.district=b.district
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE round7='Jane Kim' AND $DELTACOND GROUP BY district) AS k ON k.district=b.district
 )
 ORDER BY district;
 SQL
@@ -148,10 +148,10 @@ SELECT district,
     leno||' ('||ROUND(100.0*leno/total, 2)||'%)'
 FROM (
     SELECT b.district AS district, b.votes AS breed, l.votes AS leno,
-        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND roundOf2 IN ('London Breed', 'Mark Leno') AND $DELTACOND) AS total
+        (SELECT COUNT(*) FROM ballots WHERE district=b.district AND round8 IN ('London Breed', 'Mark Leno') AND $DELTACOND) AS total
     FROM
-    (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf2='London Breed' AND $DELTACOND GROUP BY district) AS b
-    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE roundOf2='Mark Leno' AND $DELTACOND GROUP BY district) AS l ON l.district=b.district
+    (SELECT district, COUNT(*) AS votes FROM ballots WHERE round8='London Breed' AND $DELTACOND GROUP BY district) AS b
+    JOIN (SELECT district, COUNT(*) AS votes FROM ballots WHERE round8='Mark Leno' AND $DELTACOND GROUP BY district) AS l ON l.district=b.district
 )
 ORDER BY district;
 SQL
@@ -216,13 +216,13 @@ sqlite3 $1 <<SQL
 SELECT candidate,
     votes||' ('||ROUND(100.0*votes/total, 2)||'%)'
 FROM (
-    SELECT roundOf2 AS candidate, COUNT(*) AS votes,
-        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND roundOf3='Jane Kim' AND $DELTACOND) AS total
+    SELECT round8 candidate, COUNT(*) AS votes,
+        (SELECT COUNT(*) FROM ballots WHERE contest='Mayor' AND round7='Jane Kim' AND $DELTACOND) AS total
     FROM ballots
     WHERE contest='Mayor'
-    AND roundOf3='Jane Kim'
+    AND round7='Jane Kim'
     AND $DELTACOND
-    GROUP BY roundOf2
+    GROUP BY round8
     ORDER BY votes DESC
 );
 SQL
