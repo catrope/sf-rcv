@@ -1,6 +1,9 @@
-today: 20180615_report.md 20180615_deltareport.md
+today: 20180627_report.md 20180627_deltareport.md
 
-all: 20180615_report.md 20180615_deltareport.md \
+all: 20180627_report.md 20180627_deltareport.md \
+	20180621_report.md 20180621_deltareport.md \
+	20180618_report.md 20180618_deltareport.md \
+	20180615_report.md 20180615_deltareport.md \
 	20180614_report.md 20180614_deltareport.md \
 	20180613_report.md 20180613_deltareport.md \
 	20180612_report.md 20180612_deltareport.md \
